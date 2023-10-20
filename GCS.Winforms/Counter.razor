@@ -1,8 +1,31 @@
-﻿<h1>Counter</h1>
+﻿<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+@using Microsoft.AspNetCore.Components.Forms
+@inject NavigationManager NavigationManager
+@page "/"
+
+<h1>Counter</h1>
 
 <p>Current count: @currentCount</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button> 
+<br/>
+
+<MudButton Color="Color.Primary" Variant="Variant.Filled" Class="ma-1" @onclick="IncrementCount">Click me</MudButton>
+<br />
+
+<MudButton Color="Color.Primary" Variant="Variant.Filled" Class="ma-1" Href="page2" >Page 2</MudButton>
+<br />
+
+<Microsoft.AspNetCore.Components.Forms.InputFile id="txtUploader" OnChange="OnFileUpload" hidden/>
+<MudButton Color="Color.Primary" Variant="Variant.Filled" Class="ma-1" HtmlTag="label" for="txtUploader">Upload TXT</MudButton>
+<br/>
+
+<h2>Conteúdo do TXT:</h2>
+<br/>
+@fileContent
 
 @code {
     private int currentCount = 0;
@@ -11,4 +34,17 @@
     {
         currentCount++;
     }
+
+    private string fileContent = "";
+    private async void OnFileUpload(InputFileChangeEventArgs e)
+    {
+        using (StreamReader reader = new StreamReader(e.File.OpenReadStream(), System.Text.Encoding.Default))
+        {
+            fileContent = await reader.ReadToEndAsync();
+        }
+        StateHasChanged();
+    }
+
+
+
 }
